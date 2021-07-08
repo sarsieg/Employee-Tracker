@@ -44,7 +44,7 @@ function firstPrompt() {
             name: "task",
             message: "What would you like to do?",
             choices: [
-                "View Employee",
+                "View Employees",
                 "View Employees by Department",
                 "Add Employee",
                 "Remove Employee",
@@ -52,5 +52,14 @@ function firstPrompt() {
                 "Add Role",
                 "End"
             ]
+        })
+        .then(function({ task }) {
+            switch (task) {
+                case "View Employees":
+                    viewEmployee();
+                    break;
+
+                case ""
+            }
         })
 }
