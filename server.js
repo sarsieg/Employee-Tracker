@@ -64,9 +64,12 @@ function firstPrompt() {
                     break;
 
                 case "AddEmployee":
-                    viewAddEmployee();
+                    AddEmployee();
                     break;
 
+                case "Remove Employees":
+                    removeEmployees();
+                    break;
             }
         })
 }
