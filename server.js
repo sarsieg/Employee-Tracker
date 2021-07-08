@@ -1,6 +1,7 @@
 // dependencies
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const { allowedNodeEnvironmentFlags } = require("process");
 require("console.table");
 
 // mysql connection
@@ -74,6 +75,11 @@ function firstPrompt() {
                 case "Update Employee Role":
                     updateEmployeeRole();
                     break;
+
+                case "Add Role":
+                    addRole();
+                    break;
+
             }
         })
 }
