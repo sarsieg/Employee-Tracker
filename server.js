@@ -34,3 +34,23 @@ connection.connect(function(err) {
     firstPrompt();
 
 });
+
+// prompts the user for what action they should take
+function firstPrompt() {
+
+    inquirer
+        .prompt({
+            type: "list",
+            name: "task",
+            message: "What would you like to do?",
+            choices: [
+                "View Employee",
+                "View Employees by Department",
+                "Add Employee",
+                "Remove Employee",
+                "Update Employee Role",
+                "Add Role",
+                "End"
+            ]
+        })
+}
