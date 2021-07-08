@@ -59,7 +59,10 @@ function firstPrompt() {
                     viewEmployee();
                     break;
 
-                case ""
+                case "View Employees by Department":
+                    viewEmployeeByDepartment();
+                    break;
+
             }
         })
 }
