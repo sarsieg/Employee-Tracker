@@ -17,3 +17,20 @@ const connection = mysql.createConnection({
     password: 'PlacePassWordHere',
     database: 'employeesDB'
 });
+
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("connected as id " + connection.threadId);
+    console.log(`
+    ╔═══╗─────╔╗──────────────╔═╗╔═╗
+    ║╔══╝─────║║──────────────║║╚╝║║
+    ║╚══╦╗╔╦══╣║╔══╦╗─╔╦══╦══╗║╔╗╔╗╠══╦═╗╔══╦══╦══╦═╗
+    ║╔══╣╚╝║╔╗║║║╔╗║║─║║║═╣║═╣║║║║║║╔╗║╔╗╣╔╗║╔╗║║═╣╔╝
+    ║╚══╣║║║╚╝║╚╣╚╝║╚═╝║║═╣║═╣║║║║║║╔╗║║║║╔╗║╚╝║║═╣║
+    ╚═══╩╩╩╣╔═╩═╩══╩═╗╔╩══╩══╝╚╝╚╝╚╩╝╚╩╝╚╩╝╚╩═╗╠══╩╝
+    ───────║║──────╔═╝║─────────────────────╔═╝║
+    ───────╚╝──────╚══╝─────────────────────╚══╝`)
+
+    firstPrompt();
+
+});
