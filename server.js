@@ -80,6 +80,10 @@ function firstPrompt() {
                     addRole();
                     break;
 
+                case "End":
+                    connection.end();
+                    break;
+
             }
-        })
+        });
 }
