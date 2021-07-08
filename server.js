@@ -70,6 +70,10 @@ function firstPrompt() {
                 case "Remove Employees":
                     removeEmployees();
                     break;
+
+                case "Update Employee Role":
+                    updateEmployeeRole();
+                    break;
             }
         })
 }
