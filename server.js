@@ -2,6 +2,8 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 require("console.table");
+// const sql = require("./sql");
+
 
 // mysql connection
 const connection = mysql.createConnection({
@@ -14,7 +16,7 @@ const connection = mysql.createConnection({
     user: 'root',
 
     // your password
-    password: 'PlacePassWordHere',
+    password: '4Ncz4hfk*',
     database: 'employeesDB'
 });
 
@@ -63,8 +65,8 @@ function firstPrompt() {
                     viewEmployeeByDepartment();
                     break;
 
-                case "AddEmployee":
-                    AddEmployee();
+                case "Add Employee":
+                    addEmployee();
                     break;
 
                 case "Remove Employees":
@@ -93,13 +95,14 @@ function viewEmployee() {
     console.log("Viewing employees\n");
 
     var query =
-        `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name AS manager
+        `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
     FROM employee e
     LEFT JOIN role r
         ON e.role_id = r.id
     LEFT JOIN department d
     ON d.id = r.department_id
-    GROUP BY d.id, d.name`
+    LEFT JOIN employee m
+        ON m.id = e.manager_id`
 
     connection.query(query, function(err, res) {
         if (err) throw err;
@@ -123,9 +126,9 @@ function viewEmployeeByDepartment() {
         ON e.role_id = r.id
     LEFT JOIN department d
     ON d.id = r.department_id
-    GROUP BY d.id, d.name `
+    GROUP BY d.id, d.name`
 
-    connection.query(query, function(err, rest) {
+    connection.query(query, function(err, res) {
         if (err) throw err;
 
         const departmentChoices = res.map(data => ({
@@ -174,7 +177,7 @@ function promptDepartment(departmentChoices) {
 }
 
 // make employee array
-function AddEmployee() {
+function addEmployee() {
     console.log("Inserting an employee!")
 
     var query =
@@ -193,14 +196,14 @@ function AddEmployee() {
         console.table(res);
         console.log("RoleToInsert!");
 
-        promptInsert(roleChoices)
+        promptInsert(roleChoices);
     });
 }
 
 function promptInsert(roleChoices) {
 
     inquirer
-        .promp([{
+        .prompt([{
                 type: "input",
                 name: "first_name",
                 message: "What is the employee's first name?"
@@ -225,7 +228,7 @@ function promptInsert(roleChoices) {
             // when finished prompting insert a new item into the db with the information given
             connection.query(query, {
                     first_name: answer.first_name,
-                    last_name: swer.last_name,
+                    last_name: answer.last_name,
                     role_id: answer.roleId,
                     manager_id: answer.managerId,
                 },
@@ -233,7 +236,7 @@ function promptInsert(roleChoices) {
                     if (err) throw err;
 
                     console.table(res);
-                    console.log(res.insteredRows + "Inserted successfully!\n");
+                    console.log(res.insertedRows + "Inserted successfully!\n");
 
                     firstPrompt();
                 });
@@ -265,14 +268,14 @@ function removeEmployees() {
 }
 
 // user choose the employee list, then employee is deleted
-function promptDelete(deletedEmployeeChoices) {
+function promptDelete(deleteEmployeeChoices) {
 
     inquirer
         .prompt([{
             type: "list",
             name: "employeeId",
             message: "Which employee do you want to remove?",
-            choices: deletedEmployeeChoices
+            choices: deleteEmployeeChoices
         }])
         .then(function(answer) {
 
@@ -299,7 +302,7 @@ function employeeArray() {
     console.log("Updating an employee");
 
     var query =
-        `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name AS manager
+        `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
         FROM employee e
         JOIN role r
             ON e.role_id = r.id
@@ -365,7 +368,7 @@ function promptEmployeeRole(employeeChoices, roleChoices) {
         ])
         .then(function(answer) {
 
-            var qyert = `UPDATE emplotyee SET role_id = ? WHERE id =?`
+            var query = `UPDATE employee SET role_id = ? WHERE id =?`
 
             // when prompting is complete insert new item into the db with the new information
             connection.query(query, [answer.roleId,
@@ -405,11 +408,11 @@ function addRole() {
         console.table(res);
         console.log("Department array!");
 
-        promptAddRole(departmentChoices);
+        promptaddRole(departmentChoices);
     });
 }
 
-function promptAddRole(departmentChoices) {
+function promptaddRole(departmentChoices) {
 
     inquirer
         .prompt([{
