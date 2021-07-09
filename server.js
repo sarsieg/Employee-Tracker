@@ -290,3 +290,8 @@ function promptDelete(deletedEmployeeChoices) {
             });
         });
 }
+
+// "Updated Employee Role" / UPDATE,
+function updateEmployeeRole() {
+    employeeArray();
+}
