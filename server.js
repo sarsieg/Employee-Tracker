@@ -382,3 +382,30 @@ function promptEmployeeRole(employeeChoices, roleChoices) {
                 });
         });
 }
+
+// "Add Role" / CREATE: INSERT INTO
+function addRole() {
+
+    var query =
+        `SELECT e.id, d.name, r.salary AS budget
+    FROM employee e
+    JOIN role r
+        ON e.role_id = r.id
+    JOIN department d
+    ON d.id = r.department_id
+    GROUP BY d.id, d.name`
+
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+
+        const departmentChoices = res.map(({ id, name }) => ({
+            value: id,
+            name: `${id} ${name}`
+        }));
+
+        console.table(res);
+        console.log("Department array!");
+
+        promptAddRole(departmentChoices);
+    });
+}
