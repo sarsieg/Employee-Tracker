@@ -347,3 +347,38 @@ function roleArray(employeeChoices) {
         promptEmployeeRole(employeeChoices, roleChoices);
     });
 }
+
+function promptEmployeeRole(employeeChoices, roleChoices) {
+
+    inquirer
+        .prompt([{
+                type: "list",
+                name: "employeeId",
+                message: "Which employee do you want to set with the role?",
+                choices: employeeChoices
+            },
+            {
+                type: "list",
+                name: "roleId",
+                message: "Which role do you want to update?",
+                choices: roleChoices
+            },
+        ])
+        .then(function(answer) {
+
+            var qyert = `UPDATE emplotyee SET role_id = ? WHERE id =?`
+
+            // when prompting is complete insert new item into the db with the new information
+            connection.query(query, [answer.roleId,
+                    answer.employeeId
+                ],
+                function(err, res) {
+                    if (err) throw err;
+
+                    console.table(res);
+                    console.log(res.affectedRows + "Updated successfully!");
+
+                    firstPrompt();
+                });
+        });
+}
