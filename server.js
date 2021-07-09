@@ -226,7 +226,7 @@ function promptInsert(roleChoices) {
             // when finished prompting insert a new item into the db with the information given
             connection.query(query, {
                     first_name: answer.first_name,
-                    last_name: answer.last_name,
+                    last_name: swer.last_name,
                     role_id: answer.roleId,
                     manager_id: answer.managerId,
                 },
@@ -239,4 +239,28 @@ function promptInsert(roleChoices) {
                     firstPrompt();
                 });
         });
+}
+
+// "Remove Employees" / DELETE, DELETE FROM
+// Make an employee array to delete
+function removeEmployees() {
+    console.log("Deleting an employee");
+
+    var query =
+        `SELECT e.id, e.first_name, e.last_name
+        FROM employee e`
+
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+
+        const deleteEmployeeChoices = res.map(({ id, first_name, last_name }) => ({
+            value: id,
+            name: `${id} ${first_name} ${last_name}`
+        }));
+
+        console.table(res);
+        console.log("ArrayToDelete!\n");
+
+        promptDelete(deleteEmployeeChoices);
+    });
 }
