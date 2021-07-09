@@ -264,3 +264,29 @@ function removeEmployees() {
         promptDelete(deleteEmployeeChoices);
     });
 }
+
+// user choose the employee list, then employee is deleted
+function promptDelete(deletedEmployeeChoices) {
+
+    inquirer
+        .prompt([{
+            type: "list",
+            name: "employeeId",
+            message: "Which employee do you want to remove?",
+            choices: deletedEmployeeChoices
+        }])
+        .then(function(answer) {
+
+            var query = `DELETE FROM employee WHERE ?`;
+
+            // when done prompting insert a new item into the db with the information given
+            connection.query(query, { id: answer.employeeId }, function(err, res) {
+                if (err) throw err;
+
+                console.table(res);
+                console.log(res.affectedRows + "Deleted!\n");
+
+                firstPrompt();
+            });
+        });
+}
