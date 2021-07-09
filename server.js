@@ -323,3 +323,27 @@ function employeeArray() {
         roleArray(employeeChoices);
     });
 }
+
+function roleArray(employeeChoices) {
+    console.log("Updating a role");
+
+    var query =
+        `SELECT r.id, r.title, r.salary
+    FROM role r`
+    let roleChoices;
+
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+
+        roleChoices = res.map(({ id, title, salary }) => ({
+            value: id,
+            title: `${title}`,
+            salary: `${salary}`
+        }));
+
+        console.table(res);
+        console.log("roleArray to Update!\n")
+
+        promptEmployeeRole(employeeChoices, roleChoices);
+    });
+}
