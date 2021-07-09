@@ -1,7 +1,6 @@
 // dependencies
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const { allowedNodeEnvironmentFlags } = require("process");
 require("console.table");
 
 // mysql connection
