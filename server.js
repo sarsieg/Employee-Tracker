@@ -140,3 +140,15 @@ function viewEmployeeByDepartment() {
         promptDepartment(departmentChoices)
     });
 }
+
+//user choose the department list then employees pop up
+function promptDepartment(departmentChoices) {
+
+    inquirer
+        .prompt([{
+            type: "list",
+            name: "departmentId",
+            message: "Which department would you choose?",
+            choices: departmentChoices
+        }])
+}
