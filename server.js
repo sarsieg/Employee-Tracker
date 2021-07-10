@@ -49,6 +49,7 @@ function firstPrompt() {
                 "View Employees",
                 "View Employees by Department",
                 "Add Employee",
+                "Remove Employees",
                 "Update Employee Role",
                 "Add Role",
                 "End"
@@ -66,6 +67,10 @@ function firstPrompt() {
 
                 case "Add Employee":
                     addEmployee();
+                    break;
+
+                case "Remove Employees":
+                    removeEmployees();
                     break;
 
                 case "Update Employee Role":
@@ -238,7 +243,53 @@ function promptInsert(roleChoices) {
         });
 }
 
+// remove employees and make array to delete
+function removeEmployees() {
+    console.log("Deleting an employee");
 
+    var query =
+        `SELECT e.id, e.first_name, e.last_name
+        FROM employee e`
+
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+
+        const deleteEmployeeChoices = res.map(({ id, first_name, last_name }) => ({
+            value: id,
+            name: `${id} ${first_name} ${last_name}`
+        }));
+
+        console.table(res);
+        console.log("ArrayToDelete!\n");
+
+        promptDelete(deleteEmployeeChoices);
+    });
+}
+// deleting employee from list
+function promptDelete(deleteEmployeeChoices) {
+
+    inquirer
+        .prompt([{
+            type: "list",
+            name: "employeeId",
+            message: "Which employee do you want to remove?",
+            choices: deleteEmployeeChoices
+        }])
+        .then(function(answer) {
+
+            var query = `DELETE FROM employee WHERE ?`;
+
+            connection.query(query, { id: answer.employeeId }, function(err, res) {
+                if (err) throw err;
+
+                console.table(res);
+                console.log(res.affectedRows + "Deleted!\n");
+
+                firstPrompt();
+            });
+        });
+
+}
 
 // "Updated Employee Role" / UPDATE,
 function updateEmployeeRole() {
@@ -339,6 +390,7 @@ function addRole() {
         `SELECT e.id, d.name, r.salary AS budget
     FROM employee e
     JOIN role r
+
         ON e.role_id = r.id
     JOIN department d
     ON d.id = r.department_id
@@ -355,11 +407,11 @@ function addRole() {
         console.table(res);
         console.log("Department array!");
 
-        promptaddRole(departmentChoices);
+        promptAddRole(departmentChoices);
     });
 }
 
-function promptaddRole(departmentChoices) {
+function promptAddRole(departmentChoices) {
 
     inquirer
         .prompt([{
